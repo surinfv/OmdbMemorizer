@@ -1,11 +1,11 @@
-package com.fed.omdbmemorizer.ui
+package com.fed.omdbmemorizer.presentation
 
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import com.fed.omdbmemorizer.R
-import com.fed.omdbmemorizer.ui.favorites.FavoritesFragment
-import com.fed.omdbmemorizer.ui.search.SearchFragment
+import com.fed.omdbmemorizer.presentation.favorites.FavoritesFragment
+import com.fed.omdbmemorizer.presentation.search.SearchFragment
 import kotlinx.android.synthetic.main.activity_main.pager
 import kotlinx.android.synthetic.main.activity_main.tabs
 import kotlinx.android.synthetic.main.activity_main.toolbar

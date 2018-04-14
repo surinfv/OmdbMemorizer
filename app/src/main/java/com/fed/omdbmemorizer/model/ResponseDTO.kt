@@ -7,4 +7,4 @@ data class ResponseDTO(@SerializedName("Response")
                        @SerializedName("totalResults")
                        val totalResults: String = "",
                        @SerializedName("Search")
-                       val movieList: List<MovieDTO>?)
+                       val movieList: ArrayList<MovieDTO>?)

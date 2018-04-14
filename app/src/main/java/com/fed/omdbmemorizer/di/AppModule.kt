@@ -1,11 +1,16 @@
 package com.fed.omdbmemorizer.di
 
+import android.arch.persistence.room.Room
 import android.content.Context
+import com.fed.omdbmemorizer.database.AppDatabase
+import com.fed.omdbmemorizer.database.MovieDAO
 import com.fed.omdbmemorizer.network.OmdbApi
+import com.fed.omdbmemorizer.presentation.favorites.FavoritesContracts
+import com.fed.omdbmemorizer.presentation.favorites.FavoritesPresenter
 import com.fed.omdbmemorizer.repository.IRepository
 import com.fed.omdbmemorizer.repository.Repository
-import com.fed.omdbmemorizer.ui.search.SearchContracts
-import com.fed.omdbmemorizer.ui.search.SearchPresenter
+import com.fed.omdbmemorizer.presentation.search.SearchContracts
+import com.fed.omdbmemorizer.presentation.search.SearchPresenter
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -15,7 +20,7 @@ import javax.inject.Singleton
 
 
 @Module
-class AppModule(context: Context) {
+class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
@@ -29,10 +34,23 @@ class AppModule(context: Context) {
 
     @Provides
     @Singleton
-    fun provideRepository(omdbApi: OmdbApi): IRepository = Repository(omdbApi)
+    fun provideMovieDao(): MovieDAO =
+            Room.databaseBuilder(context, AppDatabase::class.java, "favoritesMovies-db")
+                .build()
+                .movieDAO
+
+    @Provides
+    @Singleton
+    fun provideRepository(omdbApi: OmdbApi, movieDAO: MovieDAO)
+            : IRepository = Repository(omdbApi, movieDAO)
 
     @Provides
     @Singleton
     fun provideSearchPresenter(repository: IRepository)
             : SearchContracts.Presenter = SearchPresenter(repository)
+
+    @Provides
+    @Singleton
+    fun provideFavoritePresenter(repository: IRepository)
+            : FavoritesContracts.Presenter = FavoritesPresenter(repository)
 }

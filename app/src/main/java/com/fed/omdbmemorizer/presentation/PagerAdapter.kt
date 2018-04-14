@@ -1,4 +1,4 @@
-package com.fed.omdbmemorizer.ui
+package com.fed.omdbmemorizer.presentation
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

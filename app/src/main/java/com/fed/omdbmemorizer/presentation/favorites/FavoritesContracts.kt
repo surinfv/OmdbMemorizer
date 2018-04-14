@@ -1,18 +1,17 @@
-package com.fed.omdbmemorizer.ui.search
+package com.fed.omdbmemorizer.presentation.favorites
 
 import com.fed.omdbmemorizer.model.MovieDTO
 
 
-interface SearchContracts {
+interface FavoritesContracts {
     interface Fragment {
         fun updateData(movies: List<MovieDTO>)
         fun showToast(message: String)
     }
 
     interface Presenter {
-        fun onAttach(fragment: SearchContracts.Fragment)
+        fun onAttach(fragment: FavoritesContracts.Fragment)
         fun onDetach()
-        fun doRequest(title: String)
+        fun loadFavorites()
     }
-
 }

@@ -1,14 +1,18 @@
 package com.fed.omdbmemorizer.model
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "favoritesMovies")
 data class MovieDTO(@SerializedName("Type")
-                    val type: String = "",
+                    var type: String = "",
                     @SerializedName("Year")
-                    val year: String = "",
+                    var year: String = "",
                     @SerializedName("imdbID")
-                    val imdbID: String = "",
+                    var imdbID: String = "",
                     @SerializedName("Poster")
-                    val poster: String = "",
+                    var poster: String = "",
                     @SerializedName("Title")
-                    val title: String = "")
+                    @PrimaryKey(autoGenerate = false)
+                    var title: String = "")

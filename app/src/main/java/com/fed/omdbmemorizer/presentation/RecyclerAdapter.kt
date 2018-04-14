@@ -1,4 +1,4 @@
-package com.fed.omdbmemorizer.ui
+package com.fed.omdbmemorizer.presentation
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -24,16 +24,16 @@ class RecyclerAdapter(private var context: Context?,
         return RecyclerHolder(v)
     }
 
-//    fun setMovies(movies: ArrayList<MovieDTO>) {
-//        this.movies = movies
-//    }
+    fun setMovies(movies: ArrayList<MovieDTO>) {
+        this.movies = movies
+    }
 
     override fun getItemCount(): Int = movies.size
 
     inner class RecyclerHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(item: MovieDTO) {
             itemView.title_text_view.text = item.title
-            if (item.poster != null) {
+            if (item.poster.isNotEmpty()) {
             Glide.with(context!!)
                     .load(item.poster)
 //                        .placeholder(R.drawable.piwo_48)
