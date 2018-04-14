@@ -1,4 +1,4 @@
-package com.fed.imdbmemorizer
+package com.fed.omdbmemorizer
 
 import org.junit.Test
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ImdbMemorizer</string>
+    <string name="app_name">OmdbMemorizer</string>
     <string name="title_search">Search</string>
     <string name="title_favorites">Favorites</string>
 </resources>

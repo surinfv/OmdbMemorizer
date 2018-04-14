@@ -1,4 +1,4 @@
-package com.fed.imdbmemorizer.ui.favorites
+package com.fed.omdbmemorizer.ui.favorites
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -6,8 +6,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.fed.imdbmemorizer.R
-import com.fed.imdbmemorizer.ui.RecyclerAdapter
+import com.fed.omdbmemorizer.R
+import com.fed.omdbmemorizer.ui.RecyclerAdapter
 import kotlinx.android.synthetic.main.favorites_fragment_layout.recycler_view
 
 
@@ -26,6 +26,7 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.layoutManager = LinearLayoutManager(context)
+        recycler_view.isNestedScrollingEnabled = false
     }
 
     override fun onResume() {

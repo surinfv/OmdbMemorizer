@@ -1,11 +1,11 @@
-package com.fed.imdbmemorizer.ui
+package com.fed.omdbmemorizer.ui
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.fed.imdbmemorizer.R
+import com.fed.omdbmemorizer.R
 import kotlinx.android.synthetic.main.list_item.view.title_text_view
 
 
