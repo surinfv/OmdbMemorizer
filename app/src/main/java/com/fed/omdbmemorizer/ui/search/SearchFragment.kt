@@ -6,17 +6,23 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.fed.omdbmemorizer.App
 import com.fed.omdbmemorizer.R
+import com.fed.omdbmemorizer.model.MovieDTO
 import com.fed.omdbmemorizer.ui.RecyclerAdapter
 import kotlinx.android.synthetic.main.search_fragment_layout.recycler_view
+import javax.inject.Inject
 
 
-class SearchFragment : Fragment() {
-    private lateinit var adapter: RecyclerAdapter
+class SearchFragment : Fragment(), SearchContracts.Fragment {
+    private var adapter: RecyclerAdapter? = null
+    @Inject lateinit var presenter: SearchContracts.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
+        App.component?.injects(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,16 +37,21 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        presenter.onAttach(this)
+        presenter.doRequest("batman")
+    }
 
-        adapter = RecyclerAdapter(context, getPlaceHolders())
+    override fun onPause() {
+        super.onPause()
+        presenter.onDetach()
+    }
+
+    override fun updateData(movies: List<MovieDTO>) {
+        if (adapter == null) adapter = RecyclerAdapter(context, movies)
         recycler_view.adapter = adapter
     }
 
-    private fun getPlaceHolders(): ArrayList<String> {
-        val list = ArrayList<String>()
-        for (i in 1..50) {
-            list.add("$i search item")
-        }
-        return list
+    override fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 }

@@ -32,15 +32,7 @@ class FavoritesFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        adapter = RecyclerAdapter(context, getPlaceHolders())
+        adapter = RecyclerAdapter(context, ArrayList())
         recycler_view.adapter = adapter
-    }
-
-    private fun getPlaceHolders(): ArrayList<String> {
-        val list = ArrayList<String>()
-        for (i in 1..50) {
-            list.add("$i favorite item")
-        }
-        return list
     }
 }

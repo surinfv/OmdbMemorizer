@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -24,9 +26,10 @@ android {
 
 ext {
     androidSupport = '27.1.1'
-    retrofit = '2.3.0'
-    roomPersistence = '1.0.0'
+    retrofit = '2.4.0'
+    glide = '4.7.1'
     dagger2 = '2.12'
+    roomPersistence = '1.0.0'
 }
 
 dependencies {
@@ -35,11 +38,26 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$androidSupport"
     implementation "com.android.support:design:$androidSupport"
     implementation "com.android.support:cardview-v7:$androidSupport"
-
     implementation "com.android.support.constraint:constraint-layout:1.0.2"
 
+    //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
+
+    //Glide
+    implementation "com.github.bumptech.glide:glide:$glide"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide"
+
+    //Rx
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
+
+    //Dagger
+    implementation "com.google.dagger:dagger-android-support:$dagger2"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger2"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger2"
+    kapt "com.google.dagger:dagger-compiler:$dagger2"
 
 
     testImplementation 'junit:junit:4.12'
