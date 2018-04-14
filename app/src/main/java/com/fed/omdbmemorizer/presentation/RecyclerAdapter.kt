@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.list_item.view.title_text_view
 
 
 class RecyclerAdapter(private var context: Context?,
-                      private var movies: List<MovieDTO>) : RecyclerView.Adapter<RecyclerAdapter.RecyclerHolder>() {
+                      private var movies: ArrayList<MovieDTO>) : RecyclerView.Adapter<RecyclerAdapter.RecyclerHolder>() {
     override fun onBindViewHolder(holder: RecyclerHolder, position: Int) {
         holder.bind(movies[position])
     }
@@ -24,8 +24,12 @@ class RecyclerAdapter(private var context: Context?,
         return RecyclerHolder(v)
     }
 
-    fun setMovies(movies: ArrayList<MovieDTO>) {
-        this.movies = movies
+    fun addMovies(movies: ArrayList<MovieDTO>) {
+        this.movies.addAll(movies)
+    }
+
+    fun clearMovies() {
+        movies.clear()
     }
 
     override fun getItemCount(): Int = movies.size
@@ -33,7 +37,7 @@ class RecyclerAdapter(private var context: Context?,
     inner class RecyclerHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(item: MovieDTO) {
             itemView.title_text_view.text = item.title
-            if (item.poster.isNotEmpty()) {
+            if (item.poster.isNotEmpty() && item.poster != "N/A") {
             Glide.with(context!!)
                     .load(item.poster)
 //                        .placeholder(R.drawable.piwo_48)

@@ -8,5 +8,6 @@ import retrofit2.http.Query
 
 interface OmdbApi {
     @GET("/?apikey=79362265")
-    fun searchMovies(@Query("s") title: String): Single<ResponseDTO>
+    fun searchMovies(@Query("s") title: String,
+                     @Query("page") page: String): Single<ResponseDTO>
 }

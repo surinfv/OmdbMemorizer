@@ -6,6 +6,7 @@ import com.fed.omdbmemorizer.model.MovieDTO
 interface SearchContracts {
     interface Fragment {
         fun updateData(movies: ArrayList<MovieDTO>)
+        fun clearMoviesList()
         fun showToast(message: String)
         fun showProgress()
         fun hideProgress()
@@ -16,6 +17,6 @@ interface SearchContracts {
         fun onDetach()
         fun searchTextEntered(title: String)
         fun clearButtonClicked()
+        fun lastItemsShown()
     }
-
 }

@@ -11,10 +11,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class Repository(var api: OmdbApi, var movieDao: MovieDAO) : IRepository {
+class Repository(var api: OmdbApi,
+                 var movieDao: MovieDAO) : IRepository {
 
-    override fun searchMovies(title: String): Single<ResponseDTO> {
-        return api.searchMovies(title)
+    override fun searchMovies(title: String, page: String): Single<ResponseDTO> {
+        return api.searchMovies(title, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }

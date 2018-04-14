@@ -7,7 +7,7 @@ import io.reactivex.Single
 
 
 interface IRepository {
-    fun searchMovies(title: String): Single<ResponseDTO>
+    fun searchMovies(title: String, page: String): Single<ResponseDTO>
     fun saveFavorite(movie: MovieDTO): Completable
 //    fun loadFavorites(): Flowable<ArrayList<MovieDTO>>
 }

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.fed.omdbmemorizer.App
 import com.fed.omdbmemorizer.R
-import com.fed.omdbmemorizer.model.MovieDTO
 import com.fed.omdbmemorizer.presentation.RecyclerAdapter
 import kotlinx.android.synthetic.main.favorites_fragment_layout.recycler_view
 import javax.inject.Inject
@@ -33,19 +32,14 @@ class FavoritesFragment : Fragment(), FavoritesContracts.Fragment {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.isNestedScrollingEnabled = false
+        adapter = RecyclerAdapter(context, ArrayList())
+        recycler_view.adapter = adapter
     }
 
     override fun onResume() {
         super.onResume()
 
-        adapter = RecyclerAdapter(context, ArrayList())
-        recycler_view.adapter = adapter
         presenter.loadFavorites()
-    }
-
-    override fun updateData(movies: List<MovieDTO>) {
-        if (adapter == null) adapter = RecyclerAdapter(context, movies)
-        recycler_view.adapter = adapter
     }
 
     override fun showToast(message: String) {

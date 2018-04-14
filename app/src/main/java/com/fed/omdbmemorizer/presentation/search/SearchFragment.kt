@@ -2,6 +2,7 @@ package com.fed.omdbmemorizer.presentation.search
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.search_fragment_layout.nested_scroll
 import kotlinx.android.synthetic.main.search_fragment_layout.progress_bar
 import kotlinx.android.synthetic.main.search_fragment_layout.recycler_view
 import java.util.concurrent.TimeUnit
@@ -62,9 +64,14 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
 
     override fun updateData(movies: ArrayList<MovieDTO>) {
         adapter?.apply {
-            setMovies(movies)
+            addMovies(movies)
             notifyDataSetChanged()
         }
+    }
+
+    override fun clearMoviesList() {
+        adapter?.clearMovies()
+        adapter?.notifyDataSetChanged()
     }
 
     override fun showToast(message: String) {
@@ -90,6 +97,15 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
                             presenter.clearButtonClicked()
                         }
         )
+
+        //don't look at this
+        val screensToEnd = 3
+        nested_scroll.setOnScrollChangeListener(
+                NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+                    if (scrollY > v.getChildAt(0).measuredHeight - v.measuredHeight * screensToEnd) {
+                        presenter.lastItemsShown()
+                    }
+                })
     }
 
     override fun showProgress() {
