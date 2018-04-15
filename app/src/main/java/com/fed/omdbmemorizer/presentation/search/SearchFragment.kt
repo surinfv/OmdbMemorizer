@@ -46,7 +46,7 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.isNestedScrollingEnabled = false
-        adapter = RecyclerAdapter(context, ArrayList())
+        adapter = RecyclerAdapter(context, ArrayList()) {movie -> addToFavoritesClick(movie)}
         recycler_view.adapter = adapter
     }
 
@@ -63,10 +63,6 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
     }
 
     override fun updateData(movies: ArrayList<MovieDTO>) {
-//        adapter?.apply {
-//            addMovies(movies)
-//            notifyDataSetChanged()
-//        }
         adapter.addMovies(movies)
         val now = adapter.itemCount
         val before = now - movies.size
@@ -122,5 +118,9 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
     override fun hideProgress() {
         recycler_view.visibility = View.VISIBLE
         progress_bar.visibility = View.GONE
+    }
+
+    private fun addToFavoritesClick(movie: MovieDTO) {
+        presenter.addTofavorites(movie)
     }
 }

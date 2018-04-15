@@ -18,5 +18,6 @@ interface SearchContracts {
         fun searchTextEntered(title: String)
         fun clearButtonClicked()
         fun lastItemsShown()
+        fun addTofavorites(movie: MovieDTO)
     }
 }

@@ -20,9 +20,10 @@ class Repository(var api: OmdbApi,
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun saveFavorite(movie: MovieDTO) : Completable =
+    override fun addFavorite(movie: MovieDTO) : Completable =
         Completable.fromAction { movieDao.insert(movie) }
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
 
 //    override fun loadFavorites(): Flowable<ArrayList<MovieDTO>> =
 //            movieDao.getFavoriteMovies()

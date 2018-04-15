@@ -9,12 +9,15 @@ import com.bumptech.glide.Glide
 import com.fed.omdbmemorizer.R
 import com.fed.omdbmemorizer.model.MovieDTO
 import kotlinx.android.synthetic.main.list_item.view.date_text_view
+import kotlinx.android.synthetic.main.list_item.view.favorite_text_view
 import kotlinx.android.synthetic.main.list_item.view.preview_image_view
 import kotlinx.android.synthetic.main.list_item.view.title_text_view
 
 
 class RecyclerAdapter(private var context: Context?,
-                      private var movies: ArrayList<MovieDTO>) : RecyclerView.Adapter<RecyclerAdapter.RecyclerHolder>() {
+                      private var movies: ArrayList<MovieDTO>,
+                      private val favoriteClickListener: (MovieDTO) -> Unit)
+: RecyclerView.Adapter<RecyclerAdapter.RecyclerHolder>() {
     override fun onBindViewHolder(holder: RecyclerHolder, position: Int) {
         holder.bind(movies[position])
     }
@@ -47,6 +50,8 @@ class RecyclerAdapter(private var context: Context?,
                 itemView.preview_image_view.visibility = View.GONE
             }
             itemView.date_text_view.text = item.year
+
+            itemView.favorite_text_view.setOnClickListener { favoriteClickListener.invoke(item) }
         }
     }
 }

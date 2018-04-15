@@ -9,13 +9,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.fed.omdbmemorizer.App
 import com.fed.omdbmemorizer.R
+import com.fed.omdbmemorizer.model.MovieDTO
 import com.fed.omdbmemorizer.presentation.RecyclerAdapter
 import kotlinx.android.synthetic.main.favorites_fragment_layout.recycler_view
 import javax.inject.Inject
 
 
 class FavoritesFragment : Fragment(), FavoritesContracts.Fragment {
-    private var adapter: RecyclerAdapter? = null
+    private lateinit var adapter: RecyclerAdapter
     @Inject lateinit var presenter: FavoritesContracts.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +33,7 @@ class FavoritesFragment : Fragment(), FavoritesContracts.Fragment {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.isNestedScrollingEnabled = false
-        adapter = RecyclerAdapter(context, ArrayList())
+        adapter = RecyclerAdapter(context, ArrayList(), {movie -> removeFromFavorites(movie)})
         recycler_view.adapter = adapter
     }
 
@@ -44,5 +45,9 @@ class FavoritesFragment : Fragment(), FavoritesContracts.Fragment {
 
     override fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun removeFromFavorites(movie: MovieDTO) {
+
     }
 }

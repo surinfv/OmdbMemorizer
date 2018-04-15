@@ -1,6 +1,7 @@
 package com.fed.omdbmemorizer.presentation.search
 
 import android.util.Log
+import com.fed.omdbmemorizer.model.MovieDTO
 import com.fed.omdbmemorizer.repository.IRepository
 
 
@@ -59,5 +60,13 @@ class SearchPresenter(var repository: IRepository) : SearchContracts.Presenter {
     override fun lastItemsShown() {
         page++
         doRequest(false)
+    }
+
+    override fun addTofavorites(movie: MovieDTO) {
+        repository.addFavorite(movie)
+                .subscribe({
+                    fragment?.showToast("${movie.title} in your favorites!")
+                })
+
     }
 }

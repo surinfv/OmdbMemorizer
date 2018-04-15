@@ -2,15 +2,19 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="8dp" >
+    android:layout_height="wrap_content">
+
 
     <ImageView
         android:id="@+id/preview_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="500dp"
+        android:layout_width="0dp"
+        android:layout_height="480dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
+        android:paddingTop="8dp"
         android:adjustViewBounds="true"
-        android:scaleType="fitStart"
+        android:scaleType="fitCenter"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/title_text_view"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,8 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
         android:maxLines="3"
         android:padding="8dp"
         android:text="@string/place_holder_for_title"
@@ -37,27 +41,39 @@
         app:layout_constraintTop_toBottomOf="@+id/preview_image_view" />
 
     <TextView
+        android:id="@+id/favorite_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="0dp"
+        android:text="@string/add_favorite_text"
+        android:textSize="16sp"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_text_view" />
+
+    <TextView
         android:id="@+id/date_text_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_height="24dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="0dp"
         android:text="@string/placeholder_for_date"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_text_view" />
 
     <View
         android:id="@+id/separator"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_height="3dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_text_view" />
+
 </android.support.constraint.ConstraintLayout>
