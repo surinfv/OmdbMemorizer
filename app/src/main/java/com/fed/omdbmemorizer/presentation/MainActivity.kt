@@ -8,7 +8,6 @@ import com.fed.omdbmemorizer.presentation.favorites.FavoritesFragment
 import com.fed.omdbmemorizer.presentation.search.SearchFragment
 import kotlinx.android.synthetic.main.activity_main.pager
 import kotlinx.android.synthetic.main.activity_main.tabs
-import kotlinx.android.synthetic.main.activity_main.toolbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,7 +15,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         setupViewPager(pager)
         tabs.setupWithViewPager(pager)

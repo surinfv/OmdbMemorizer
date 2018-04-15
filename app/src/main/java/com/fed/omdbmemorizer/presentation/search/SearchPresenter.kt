@@ -40,7 +40,7 @@ class SearchPresenter(var repository: IRepository) : SearchContracts.Presenter {
     override fun addTofavorites(movie: MovieDTO) {
         repository.addFavorite(movie)
                 .subscribe({
-                    fragment?.showToast("${movie.title} in your favorites!")
+                    fragment?.showToast("\"${movie.title}\" - in your favorites!")
                 })
 
     }

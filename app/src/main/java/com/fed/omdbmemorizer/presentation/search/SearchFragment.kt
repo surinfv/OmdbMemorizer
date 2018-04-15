@@ -2,12 +2,11 @@ package com.fed.omdbmemorizer.presentation.search
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import com.fed.omdbmemorizer.R
 import com.fed.omdbmemorizer.di.DiProvider
@@ -17,9 +16,10 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.search_fragment_layout.nested_scroll
+import kotlinx.android.synthetic.main.search_fragment_layout.clear_text_view
 import kotlinx.android.synthetic.main.search_fragment_layout.progress_bar
 import kotlinx.android.synthetic.main.search_fragment_layout.recycler_view
+import kotlinx.android.synthetic.main.search_fragment_layout.search_text_view
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -63,13 +63,10 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
     }
 
     override fun updateData(movies: ArrayList<MovieDTO>) {
+        val before = adapter.itemCount
         adapter.addMovies(movies)
         val now = adapter.itemCount
-        val before = now - movies.size
-        for (i in before + 1..now) {
-            adapter.notifyItemInserted(i)
-        }
-//        adapter.notifyItemInserted(i) -> adapter.notifyItemRangeInserted(бла бла)
+        adapter.notifyItemRangeInserted(before + 1, now)
     }
 
     override fun clearMoviesList() {
@@ -92,32 +89,33 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
     }
 
     private fun setListeners() {
-        val searchTextView = activity?.findViewById(R.id.search_text) as TextView
-        val clearView = activity?.findViewById(R.id.clear_search_text) as View
         disposable.addAll(
-                RxTextView.textChanges(searchTextView)
+                RxTextView.textChanges(search_text_view)
                         .debounce(500, TimeUnit.MILLISECONDS)
                         .filter { it.length > 2 }
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
                             presenter.searchTextEntered(it.toString())
                         },
-                RxView.clicks(clearView)
+                RxView.clicks(clear_text_view)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
-                            searchTextView.text = ""
+                            search_text_view.setText("")
                             presenter.clearButtonClicked()
                         }
         )
 
-        //don't look at this
-        val screensToEnd = 3
-        nested_scroll.setOnScrollChangeListener(
-                NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
-                    if (scrollY > v.getChildAt(0).measuredHeight - v.measuredHeight * screensToEnd) {
-                        presenter.lastItemsShown()
-                    }
-                })
+        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val lastVisibleItemPosition = (recyclerView?.layoutManager
+                        as LinearLayoutManager).findLastVisibleItemPosition() + 1
+                val totalItemCount = recyclerView.layoutManager.itemCount
+                if (lastVisibleItemPosition > totalItemCount - 4) {
+                    presenter.lastItemsShown()
+                }
+            }
+        })
     }
 
     private fun addToFavoritesClick(movie: MovieDTO) {
