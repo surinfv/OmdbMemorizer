@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import com.fed.omdbmemorizer.App
 import com.fed.omdbmemorizer.R
+import com.fed.omdbmemorizer.di.DiProvider
 import com.fed.omdbmemorizer.model.MovieDTO
 import com.fed.omdbmemorizer.presentation.RecyclerAdapter
 import com.jakewharton.rxbinding2.view.RxView
@@ -18,7 +18,6 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.search_fragment_layout.nested_scroll
-import kotlinx.android.synthetic.main.search_fragment_layout.placeholder
 import kotlinx.android.synthetic.main.search_fragment_layout.progress_bar
 import kotlinx.android.synthetic.main.search_fragment_layout.recycler_view
 import java.util.concurrent.TimeUnit
@@ -29,17 +28,17 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
     private lateinit var adapter: RecyclerAdapter
     @Inject
     lateinit var presenter: SearchContracts.Presenter
-    private lateinit var disposable: CompositeDisposable
+    private val disposable: CompositeDisposable = CompositeDisposable()
 
-    override
-
-    fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
-        App.component?.injects(this)
+        DiProvider.component?.injects(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.search_fragment_layout, container, false)
     }
 
@@ -47,7 +46,7 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.isNestedScrollingEnabled = false
-        adapter = RecyclerAdapter(context, ArrayList()) {movie -> addToFavoritesClick(movie)}
+        adapter = RecyclerAdapter(context, ArrayList()) { movie -> addToFavoritesClick(movie) }
         recycler_view.adapter = adapter
     }
 
@@ -70,13 +69,12 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
         for (i in before + 1..now) {
             adapter.notifyItemInserted(i)
         }
+//        adapter.notifyItemInserted(i) -> adapter.notifyItemRangeInserted(бла бла)
     }
 
     override fun clearMoviesList() {
         adapter.clearMovies()
         adapter.notifyDataSetChanged()
-        recycler_view.visibility = View.GONE
-        placeholder.visibility = View.VISIBLE
     }
 
     override fun showToast(message: String) {
@@ -85,7 +83,6 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
 
     override fun showProgress() {
         recycler_view.visibility = View.GONE
-        placeholder.visibility = View.GONE
         progress_bar.visibility = View.VISIBLE
     }
 
@@ -97,7 +94,6 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
     private fun setListeners() {
         val searchTextView = activity?.findViewById(R.id.search_text) as TextView
         val clearView = activity?.findViewById(R.id.clear_search_text) as View
-        disposable = CompositeDisposable()
         disposable.addAll(
                 RxTextView.textChanges(searchTextView)
                         .debounce(500, TimeUnit.MILLISECONDS)

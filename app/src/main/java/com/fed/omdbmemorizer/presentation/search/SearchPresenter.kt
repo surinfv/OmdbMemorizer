@@ -6,7 +6,7 @@ import com.fed.omdbmemorizer.repository.IRepository
 
 
 class SearchPresenter(var repository: IRepository) : SearchContracts.Presenter {
-    private val TAG = SearchPresenter::class.java.simpleName
+    private val TAG = "SearchPresenter"
     private var fragment: SearchContracts.Fragment? = null
     private var page: Int = 1
     private var lastQuery: String = ""

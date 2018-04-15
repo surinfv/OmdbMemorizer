@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.fed.omdbmemorizer.App
 import com.fed.omdbmemorizer.R
+import com.fed.omdbmemorizer.di.DiProvider
 import com.fed.omdbmemorizer.model.MovieDTO
 import com.fed.omdbmemorizer.presentation.RecyclerAdapter
 import kotlinx.android.synthetic.main.favorites_fragment_layout.recycler_view
@@ -17,12 +17,13 @@ import javax.inject.Inject
 
 class FavoritesFragment : Fragment(), FavoritesContracts.Fragment {
     private lateinit var adapter: RecyclerAdapter
-    @Inject lateinit var presenter: FavoritesContracts.Presenter
+    @Inject
+    lateinit var presenter: FavoritesContracts.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
-        App.component?.injects(this)
+        DiProvider.component?.injects(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -33,7 +34,7 @@ class FavoritesFragment : Fragment(), FavoritesContracts.Fragment {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.isNestedScrollingEnabled = false
-        adapter = RecyclerAdapter(context, ArrayList(), {movie -> removeFromFavorites(movie)})
+        adapter = RecyclerAdapter(context, ArrayList(), { movie -> removeFromFavorites(movie) })
         recycler_view.adapter = adapter
     }
 

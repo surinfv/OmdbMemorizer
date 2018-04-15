@@ -17,6 +17,7 @@ class Repository(var api: OmdbApi,
     override fun searchMovies(title: String, page: String): Single<ResponseDTO> {
         return api.searchMovies(title, page)
                 .subscribeOn(Schedulers.io())
+//                .map {  }
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
