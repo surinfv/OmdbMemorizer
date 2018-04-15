@@ -14,7 +14,6 @@ import com.fed.omdbmemorizer.model.MovieDTO
 import com.fed.omdbmemorizer.presentation.RecyclerAdapter
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.search_fragment_layout.clear_text_view
 import kotlinx.android.synthetic.main.search_fragment_layout.progress_bar
@@ -102,14 +101,13 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
                         as LinearLayoutManager).findLastVisibleItemPosition() + 1
                 val totalItemCount = recyclerView.layoutManager.itemCount
                 if (lastVisibleItemPosition > totalItemCount - 4) {
-//                    presenter.lastItemsShown()
-//                    presenter.lastItemShownRx(??)
+                    presenter.lastItemsShown()
                 }
             }
         })
     }
 
     private fun addToFavoritesClick(movie: MovieDTO) {
-        presenter.addTofavorites(movie)
+        presenter.addToFavorites(movie)
     }
 }

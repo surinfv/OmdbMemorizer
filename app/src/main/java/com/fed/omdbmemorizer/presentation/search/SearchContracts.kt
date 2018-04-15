@@ -18,8 +18,7 @@ interface SearchContracts {
         fun onPause()
         fun clearButtonClicked()
         fun lastItemsShown()
-        fun addTofavorites(movie: MovieDTO)
+        fun addToFavorites(movie: MovieDTO)
         fun onSetTextChangeListener(charSequence: Observable<CharSequence>)
-//        fun lastItemShownRx(lastItemShown: Observable<Any>): Observable<Any>
     }
 }

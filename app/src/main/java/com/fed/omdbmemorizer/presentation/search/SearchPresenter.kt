@@ -1,11 +1,13 @@
 package com.fed.omdbmemorizer.presentation.search
 
+import android.util.Log
 import com.fed.omdbmemorizer.model.MovieDTO
 import com.fed.omdbmemorizer.repository.IRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 
@@ -16,7 +18,10 @@ class SearchPresenter(var repository: IRepository,
     private var fragment: SearchContracts.Fragment? = null
     private var page = 1
     private var lastQuery = ""
-//    private var noMoreMovies = true
+
+    private val scrollListenerSubject = PublishSubject.create<String>()
+    private lateinit var textChangeListenerObservable: Observable<String>
+    private var emitByScroll = false
 
     override fun onResume(fragment: SearchContracts.Fragment) {
         this.fragment = fragment
@@ -24,7 +29,7 @@ class SearchPresenter(var repository: IRepository,
 
     override fun onPause() {
         fragment = null
-        disposable.dispose()
+        disposable.clear()
     }
 
     override fun clearButtonClicked() {
@@ -32,51 +37,58 @@ class SearchPresenter(var repository: IRepository,
         page = 1
         lastQuery = ""
         fragment?.hideProgress()
-//        noMoreMovies = false
+        emitByScroll = false
     }
 
-    override fun lastItemsShown() {
-        page++
-        //TODO invoke new request if noMoreMovies == false
-    }
-
-//    override fun lastItemShownRx(lastItemShown: Observable<Any>): Observable<Any> {
-//        page++
-//        lastItemShown
-//                .filter(noMoreMovies)
-//    }
-
-    override fun addTofavorites(movie: MovieDTO) {
+    override fun addToFavorites(movie: MovieDTO) {
         repository.addFavorite(movie)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     fragment?.showToast("\"${movie.title}\" - in your favorites!")
                 })
+    }
 
+    override fun lastItemsShown() {
+        if (emitByScroll) {
+            emitByScroll = false
+            page++
+            scrollListenerSubject.onNext(lastQuery)
+        }
     }
 
     override fun onSetTextChangeListener(charSequence: Observable<CharSequence>) {
-        //TODO show progress somewhere
-        charSequence
+        textChangeListenerObservable = charSequence
                 .debounce(500, TimeUnit.MILLISECONDS)
+                .map { it.toString() }
                 .filter { it.length > 2 }
-                .doOnNext {
-//                    noMoreMovies = false
-                    lastQuery = it.toString()
-                }
-                // TODO add emit from last item shown here
-                .switchMap { repository.searchMovies(lastQuery, page.toString()).toObservable() }
-                .subscribeOn(Schedulers.io())
+                .filter { it != lastQuery }
+                .doOnNext { lastQuery = it.toString() }
                 .observeOn(AndroidSchedulers.mainThread())
-                .doAfterTerminate { fragment?.hideProgress() }
-                .subscribe({
-                    if (it.movieList != null) {
-                        fragment?.updateData(it.movieList)
-                    } else {
-                        fragment?.showToast("no more movies with this title")
-//                        noMoreMovies = true
+                .doOnNext { fragment?.showProgress() }
+
+        subscribeToListeners()
+    }
+
+    private fun subscribeToListeners() {
+        disposable.add(
+            Observable.merge(textChangeListenerObservable, scrollListenerSubject)
+                    .observeOn(Schedulers.io())
+                    .switchMap {
+                        repository.searchMovies(lastQuery, page.toString()).toObservable()
+                                .onErrorResumeNext(Observable.empty())
                     }
-                },{})
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext { fragment?.hideProgress() }
+                    .subscribe({
+                        if (it.movieList != null) {
+                            fragment?.updateData(it.movieList)
+                            emitByScroll = true
+                        } else {
+                            fragment?.showToast("no more movies with this title")
+                            emitByScroll = false
+                        }
+                    }, { Log.e(TAG, it.toString())})
+        )
     }
 }
