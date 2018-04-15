@@ -18,6 +18,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.search_fragment_layout.nested_scroll
+import kotlinx.android.synthetic.main.search_fragment_layout.placeholder
 import kotlinx.android.synthetic.main.search_fragment_layout.progress_bar
 import kotlinx.android.synthetic.main.search_fragment_layout.recycler_view
 import java.util.concurrent.TimeUnit
@@ -74,10 +75,23 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
     override fun clearMoviesList() {
         adapter.clearMovies()
         adapter.notifyDataSetChanged()
+        recycler_view.visibility = View.GONE
+        placeholder.visibility = View.VISIBLE
     }
 
     override fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun showProgress() {
+        recycler_view.visibility = View.GONE
+        placeholder.visibility = View.GONE
+        progress_bar.visibility = View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        recycler_view.visibility = View.VISIBLE
+        progress_bar.visibility = View.GONE
     }
 
     private fun setListeners() {
@@ -108,16 +122,6 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
                         presenter.lastItemsShown()
                     }
                 })
-    }
-
-    override fun showProgress() {
-        recycler_view.visibility = View.GONE
-        progress_bar.visibility = View.VISIBLE
-    }
-
-    override fun hideProgress() {
-        recycler_view.visibility = View.VISIBLE
-        progress_bar.visibility = View.GONE
     }
 
     private fun addToFavoritesClick(movie: MovieDTO) {

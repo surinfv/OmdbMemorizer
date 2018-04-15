@@ -7,4 +7,5 @@
     <string name="placeholder_for_date">2018–04–14</string>
     <string name="add_favorite_text">add to favorite</string>
     <string name="remove_favorite_text">remove from favorite</string>
+    <string name="text_placeholder">enter movie title in search string</string>
 </resources>

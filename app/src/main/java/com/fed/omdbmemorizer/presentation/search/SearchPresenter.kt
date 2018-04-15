@@ -25,31 +25,6 @@ class SearchPresenter(var repository: IRepository) : SearchContracts.Presenter {
         doRequest(true)
     }
 
-    private fun doRequest(newRequest: Boolean) {
-        if (!loadingInProgress) {
-            loadingInProgress = true
-            if (newRequest) fragment?.clearMoviesList()
-            repository.searchMovies(lastQuery, page.toString())
-                    .doOnSubscribe {
-                        if (newRequest) fragment?.showProgress()
-                    }
-                    .doAfterTerminate {
-                        fragment?.hideProgress()
-                        loadingInProgress = false
-                    }
-                    .subscribe({
-                        if (it.movieList != null) {
-                            fragment?.updateData(it.movieList)
-                        } else {
-                            fragment?.showToast("no movies with this title")
-                        }
-                    }, {
-                        fragment?.showToast("server error")
-                        Log.e(TAG, "server error: " + it.printStackTrace())
-                    })
-        }
-    }
-
     override fun clearButtonClicked() {
         fragment?.clearMoviesList()
         page = 1
@@ -68,5 +43,30 @@ class SearchPresenter(var repository: IRepository) : SearchContracts.Presenter {
                     fragment?.showToast("${movie.title} in your favorites!")
                 })
 
+    }
+
+    private fun doRequest(newRequest: Boolean) {
+        if (!loadingInProgress) {
+            loadingInProgress = true
+            if (newRequest) fragment?.clearMoviesList()
+            repository.searchMovies(lastQuery, page.toString())
+                    .doOnSubscribe {
+                        if (newRequest) fragment?.showProgress()
+                    }
+                    .doAfterTerminate {
+                        fragment?.hideProgress()
+                        loadingInProgress = false
+                    }
+                    .subscribe({
+                        if (it.movieList != null) {
+                            fragment?.updateData(it.movieList)
+                        } else {
+                            fragment?.showToast("no more movies with this title")
+                        }
+                    }, {
+                        fragment?.showToast("server error")
+                        Log.e(TAG, "server error: " + it.printStackTrace())
+                    })
+        }
     }
 }
