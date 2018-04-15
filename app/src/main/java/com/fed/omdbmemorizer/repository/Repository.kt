@@ -9,9 +9,9 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 
 
-class Repository(var api: OmdbApi,
-                 var movieDao: MovieDAO,
-                 var mapper: Mapper) : IRepository {
+class Repository(private var api: OmdbApi,
+                 private var movieDao: MovieDAO,
+                 private var mapper: Mapper) : IRepository {
 
     override fun searchMovies(title: String, page: String): Single<List<MovieUiEntity>> =
             api.searchMovies(title, page)

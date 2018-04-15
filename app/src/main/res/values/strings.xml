@@ -4,8 +4,10 @@
     <string name="title_favorites">Favorites</string>
     <string name="add_favorite_text">add to favorite</string>
     <string name="remove_favorite_text">remove from favorite</string>
+    <string name="placeholder_search">enter movie title in search string</string>
+    <string name="placeholder_text_empty_favorites">you do not like anything</string>
+
     <string name="placeholder_for_title">Sample - Pulp Fiction</string>
     <string name="placeholder_for_description">The lives of two mob hitmen, a boxer, a gangster\'s wife, and a pair of diner bandits intertwine in four tales of violence and redemption.</string>
     <string name="placeholder_for_date">2018–04–14</string>
-    <string name="placeholder_search">enter movie title in search string</string>
 </resources>

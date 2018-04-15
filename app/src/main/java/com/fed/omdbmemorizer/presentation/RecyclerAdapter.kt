@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.fed.omdbmemorizer.R
 import com.fed.omdbmemorizer.model.MovieUiEntity
 import kotlinx.android.synthetic.main.list_item.view.date_text_view
@@ -49,8 +50,8 @@ class RecyclerAdapter(private var context: Context?,
             if (item.poster.isNotEmpty() && item.poster != "N/A") {
             Glide.with(context!!)
                     .load(item.poster)
-                    //todo placeholder
-//                        .placeholder(R.drawable.piwo_48)
+                    .apply(RequestOptions()
+                            .placeholder(R.drawable.android))
                     .into(itemView.preview_image_view)
                 itemView.preview_image_view.visibility = View.VISIBLE
             } else {

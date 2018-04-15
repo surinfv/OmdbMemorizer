@@ -8,8 +8,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 
-class FavoritesPresenter(var repository: IRepository,
-                         var disposable: CompositeDisposable) : FavoritesContracts.Presenter {
+class FavoritesPresenter(private var repository: IRepository,
+                         private var disposable: CompositeDisposable) : FavoritesContracts.Presenter {
     private val TAG = "FavoritesPresenter"
 
     private var fragment: FavoritesContracts.Fragment? = null

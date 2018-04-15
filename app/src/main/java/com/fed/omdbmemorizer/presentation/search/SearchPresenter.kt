@@ -11,8 +11,8 @@ import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 
-class SearchPresenter(var repository: IRepository,
-                      var disposable: CompositeDisposable) : SearchContracts.Presenter {
+class SearchPresenter(private var repository: IRepository,
+                      private var disposable: CompositeDisposable) : SearchContracts.Presenter {
     private val TAG = "SearchPresenter"
 
     private var fragment: SearchContracts.Fragment? = null
@@ -33,11 +33,8 @@ class SearchPresenter(var repository: IRepository,
     }
 
     override fun clearButtonClicked() {
-        fragment?.clearMoviesList()
-        page = 1
-        lastQuery = ""
         fragment?.hideProgress()
-        emitByScroll = false
+        prepareForNewQuery()
     }
 
     override fun addToFavorites(movie: MovieUiEntity) {
@@ -63,8 +60,9 @@ class SearchPresenter(var repository: IRepository,
                 .map { it.toString() }
                 .filter { it.length > 2 }
                 .filter { it != lastQuery }
-                .doOnNext { lastQuery = it.toString() }
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { prepareForNewQuery() }
+                .doOnNext { lastQuery = it.toString() }
                 .doOnNext { fragment?.showProgress() }
 
         subscribeToListeners()
@@ -91,4 +89,11 @@ class SearchPresenter(var repository: IRepository,
                     }, { Log.e(TAG, it.toString())})
         )
     }
+    private fun prepareForNewQuery() {
+        fragment?.clearMoviesList()
+        page = 1
+        lastQuery = ""
+        emitByScroll = false
+    }
+
 }

@@ -11,6 +11,7 @@ import com.fed.omdbmemorizer.R
 import com.fed.omdbmemorizer.di.DiProvider
 import com.fed.omdbmemorizer.model.MovieUiEntity
 import com.fed.omdbmemorizer.presentation.RecyclerAdapter
+import kotlinx.android.synthetic.main.favorites_fragment_layout.placeholder_favorite
 import kotlinx.android.synthetic.main.favorites_fragment_layout.recycler_view
 import javax.inject.Inject
 
@@ -48,6 +49,13 @@ class FavoritesFragment : Fragment(), FavoritesContracts.Fragment {
     override fun updateData(movies: List<MovieUiEntity>) {
         adapter.setMovies(movies)
         adapter.notifyDataSetChanged()
+        if (movies.isEmpty()) {
+            recycler_view.visibility = View.GONE
+            placeholder_favorite.visibility = View.VISIBLE
+        } else {
+            recycler_view.visibility = View.VISIBLE
+            placeholder_favorite.visibility = View.GONE
+        }
     }
 
     override fun showToast(message: String) {
