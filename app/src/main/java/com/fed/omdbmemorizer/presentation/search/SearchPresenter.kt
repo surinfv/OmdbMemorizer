@@ -61,9 +61,11 @@ class SearchPresenter(private var repository: IRepository,
                 .filter { it.length > 2 }
                 .filter { it != lastQuery }
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { prepareForNewQuery() }
-                .doOnNext { lastQuery = it.toString() }
-                .doOnNext { fragment?.showProgress() }
+                .doOnNext {
+                    prepareForNewQuery()
+                    lastQuery = it.toString()
+                    fragment?.showProgress()
+                }
 
         subscribeToListeners()
     }
