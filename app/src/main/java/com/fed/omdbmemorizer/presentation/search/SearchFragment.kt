@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.fed.omdbmemorizer.R
 import com.fed.omdbmemorizer.di.DiProvider
-import com.fed.omdbmemorizer.model.MovieDTO
+import com.fed.omdbmemorizer.model.MovieUiEntity
 import com.fed.omdbmemorizer.presentation.RecyclerAdapter
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -58,7 +58,7 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
         presenter.onPause()
     }
 
-    override fun updateData(movies: ArrayList<MovieDTO>) {
+    override fun updateData(movies: List<MovieUiEntity>) {
         val before = adapter.itemCount
         adapter.addMovies(movies)
         val now = adapter.itemCount
@@ -107,7 +107,7 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
         })
     }
 
-    private fun addToFavoritesClick(movie: MovieDTO) {
+    private fun addToFavoritesClick(movie: MovieUiEntity) {
         presenter.addToFavorites(movie)
     }
 }

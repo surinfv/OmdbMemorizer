@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.fed.omdbmemorizer.R
-import com.fed.omdbmemorizer.model.MovieDTO
+import com.fed.omdbmemorizer.model.MovieUiEntity
 import kotlinx.android.synthetic.main.list_item.view.date_text_view
 import kotlinx.android.synthetic.main.list_item.view.favorite_text_view
 import kotlinx.android.synthetic.main.list_item.view.preview_image_view
@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.list_item.view.title_text_view
 
 
 class RecyclerAdapter(private var context: Context?,
-                      private var movies: ArrayList<MovieDTO>,
-                      private val favoriteClickListener: (MovieDTO) -> Unit)
+                      private var movies: ArrayList<MovieUiEntity>,
+                      private val favoriteClickListener: (MovieUiEntity) -> Unit)
 : RecyclerView.Adapter<RecyclerAdapter.RecyclerHolder>() {
     override fun onBindViewHolder(holder: RecyclerHolder, position: Int) {
         holder.bind(movies[position])
@@ -27,7 +27,7 @@ class RecyclerAdapter(private var context: Context?,
         return RecyclerHolder(v)
     }
 
-    fun addMovies(movies: ArrayList<MovieDTO>) {
+    fun addMovies(movies: List<MovieUiEntity>) {
         this.movies.addAll(movies)
     }
 
@@ -38,7 +38,7 @@ class RecyclerAdapter(private var context: Context?,
     override fun getItemCount(): Int = movies.size
 
     inner class RecyclerHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(item: MovieDTO) {
+        fun bind(item: MovieUiEntity) {
             itemView.title_text_view.text = item.title
             if (item.poster.isNotEmpty() && item.poster != "N/A") {
             Glide.with(context!!)

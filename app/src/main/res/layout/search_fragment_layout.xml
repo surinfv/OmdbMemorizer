@@ -25,8 +25,8 @@
             android:id="@+id/search_text_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
-        <!--android:hint="@string/placeholder_search"-->
+            android:layout_weight="1"
+            android:hint="@string/placeholder_search"/>
 
         <ImageView
             android:id="@+id/clear_text_view"

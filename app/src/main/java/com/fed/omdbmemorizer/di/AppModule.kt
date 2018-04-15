@@ -3,6 +3,7 @@ package com.fed.omdbmemorizer.di
 import android.arch.persistence.room.Room
 import android.content.Context
 import com.fed.omdbmemorizer.database.AppDatabase
+import com.fed.omdbmemorizer.database.Mapper
 import com.fed.omdbmemorizer.database.MovieDAO
 import com.fed.omdbmemorizer.network.OmdbApi
 import com.fed.omdbmemorizer.presentation.favorites.FavoritesContracts
@@ -45,8 +46,12 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideRepository(omdbApi: OmdbApi, movieDAO: MovieDAO)
-            : IRepository = Repository(omdbApi, movieDAO)
+    fun provideMapper(): Mapper = Mapper()
+
+    @Provides
+    @Singleton
+    fun provideRepository(omdbApi: OmdbApi, movieDAO: MovieDAO, mapper: Mapper) : IRepository
+            = Repository(omdbApi, movieDAO, mapper)
 
     @Provides
     @Singleton

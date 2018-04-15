@@ -1,7 +1,7 @@
 package com.fed.omdbmemorizer.presentation.search
 
 import android.util.Log
-import com.fed.omdbmemorizer.model.MovieDTO
+import com.fed.omdbmemorizer.model.MovieUiEntity
 import com.fed.omdbmemorizer.repository.IRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -40,7 +40,7 @@ class SearchPresenter(var repository: IRepository,
         emitByScroll = false
     }
 
-    override fun addToFavorites(movie: MovieDTO) {
+    override fun addToFavorites(movie: MovieUiEntity) {
         repository.addFavorite(movie)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -81,8 +81,8 @@ class SearchPresenter(var repository: IRepository,
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnNext { fragment?.hideProgress() }
                     .subscribe({
-                        if (it.movieList != null) {
-                            fragment?.updateData(it.movieList)
+                        if (it.isNotEmpty()) {
+                            fragment?.updateData(it)
                             emitByScroll = true
                         } else {
                             fragment?.showToast("no more movies with this title")

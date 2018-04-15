@@ -1,12 +1,12 @@
 package com.fed.omdbmemorizer.presentation.search
 
-import com.fed.omdbmemorizer.model.MovieDTO
+import com.fed.omdbmemorizer.model.MovieUiEntity
 import io.reactivex.Observable
 
 
 interface SearchContracts {
     interface Fragment {
-        fun updateData(movies: ArrayList<MovieDTO>)
+        fun updateData(movies: List<MovieUiEntity>)
         fun clearMoviesList()
         fun showToast(message: String)
         fun showProgress()
@@ -18,7 +18,7 @@ interface SearchContracts {
         fun onPause()
         fun clearButtonClicked()
         fun lastItemsShown()
-        fun addToFavorites(movie: MovieDTO)
+        fun addToFavorites(movie: MovieUiEntity)
         fun onSetTextChangeListener(charSequence: Observable<CharSequence>)
     }
 }
