@@ -59,7 +59,7 @@ class SearchPresenter(var repository: IRepository,
 
     override fun onSetTextChangeListener(charSequence: Observable<CharSequence>) {
         textChangeListenerObservable = charSequence
-                .debounce(500, TimeUnit.MILLISECONDS)
+                .debounce(1000, TimeUnit.MILLISECONDS)
                 .map { it.toString() }
                 .filter { it.length > 2 }
                 .filter { it != lastQuery }

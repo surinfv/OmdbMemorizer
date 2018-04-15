@@ -26,7 +26,9 @@ class FavoritesFragment : Fragment(), FavoritesContracts.Fragment {
         DiProvider.component?.injects(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.favorites_fragment_layout, container, false)
     }
 
@@ -34,14 +36,18 @@ class FavoritesFragment : Fragment(), FavoritesContracts.Fragment {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.isNestedScrollingEnabled = false
-        adapter = RecyclerAdapter(context, ArrayList(), { movie -> removeFromFavorites(movie) })
+        adapter = RecyclerAdapter(context, ArrayList(), false) { movie -> removeFromFavorites(movie) }
         recycler_view.adapter = adapter
     }
 
     override fun onResume() {
         super.onResume()
+        presenter.onResume(this)
+    }
 
-        presenter.loadFavorites()
+    override fun updateData(movies: List<MovieUiEntity>) {
+        adapter.setMovies(movies)
+        adapter.notifyDataSetChanged()
     }
 
     override fun showToast(message: String) {
@@ -49,6 +55,6 @@ class FavoritesFragment : Fragment(), FavoritesContracts.Fragment {
     }
 
     private fun removeFromFavorites(movie: MovieUiEntity) {
-
+        presenter.removeFavoritesClick(movie)
     }
 }

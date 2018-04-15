@@ -16,7 +16,9 @@ import kotlinx.android.synthetic.main.list_item.view.title_text_view
 
 class RecyclerAdapter(private var context: Context?,
                       private var movies: ArrayList<MovieUiEntity>,
-                      private val favoriteClickListener: (MovieUiEntity) -> Unit)
+                      private val isSearch: Boolean,
+                      private val favoriteClickListener: (MovieUiEntity) -> Unit
+                      )
 : RecyclerView.Adapter<RecyclerAdapter.RecyclerHolder>() {
     override fun onBindViewHolder(holder: RecyclerHolder, position: Int) {
         holder.bind(movies[position])
@@ -31,6 +33,10 @@ class RecyclerAdapter(private var context: Context?,
         this.movies.addAll(movies)
     }
 
+    fun setMovies(movies: List<MovieUiEntity>) {
+        this.movies = movies as ArrayList<MovieUiEntity>
+    }
+
     fun clearMovies() {
         movies.clear()
     }
@@ -43,6 +49,7 @@ class RecyclerAdapter(private var context: Context?,
             if (item.poster.isNotEmpty() && item.poster != "N/A") {
             Glide.with(context!!)
                     .load(item.poster)
+                    //todo placeholder
 //                        .placeholder(R.drawable.piwo_48)
                     .into(itemView.preview_image_view)
                 itemView.preview_image_view.visibility = View.VISIBLE
@@ -51,6 +58,10 @@ class RecyclerAdapter(private var context: Context?,
             }
             itemView.date_text_view.text = item.year
 
+            val res = context?.resources
+            itemView.favorite_text_view.text =
+                    if (isSearch) res?.getString(R.string.add_favorite_text)
+                    else res?.getString(R.string.remove_favorite_text)
             itemView.favorite_text_view.setOnClickListener { favoriteClickListener.invoke(item) }
         }
     }

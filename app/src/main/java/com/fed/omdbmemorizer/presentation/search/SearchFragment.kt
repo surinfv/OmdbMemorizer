@@ -43,7 +43,7 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.layoutManager = LinearLayoutManager(context)
         recycler_view.isNestedScrollingEnabled = false
-        adapter = RecyclerAdapter(context, ArrayList()) { movie -> addToFavoritesClick(movie) }
+        adapter = RecyclerAdapter(context, ArrayList(), true) { movie -> addToFavoritesClick(movie) }
         recycler_view.adapter = adapter
     }
 

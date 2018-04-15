@@ -6,7 +6,7 @@ import com.fed.omdbmemorizer.model.MovieUiEntity
 
 
 class Mapper {
-    fun fromDTOtoUI(listDTO: ArrayList<MovieDTO>?): ArrayList<MovieUiEntity> {
+    fun fromListDtoToListUi(listDTO: ArrayList<MovieDTO>?): ArrayList<MovieUiEntity> {
         val listUI = ArrayList<MovieUiEntity>()
         if (listDTO != null) {
             for (movieDto in listDTO) {
@@ -20,8 +20,20 @@ class Mapper {
         return listUI
     }
 
+    fun fromListDbToListUi(listDb: List<MovieDbEntity>): List<MovieUiEntity> {
+        val listUI = ArrayList<MovieUiEntity>()
+        for (movieDb in listDb) {
+            listUI.add(MovieUiEntity(
+                    movieDb.title,
+                    movieDb.year,
+                    movieDb.poster
+            ))
+        }
+        return listUI
+    }
+
     fun fromUItoDB(movieUI: MovieUiEntity): MovieDbEntity =
             MovieDbEntity(movieUI.title,
-                          movieUI.year,
-                          movieUI.poster)
+                    movieUI.year,
+                    movieUI.poster)
 }
