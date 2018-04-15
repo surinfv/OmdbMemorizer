@@ -1,6 +1,7 @@
 package com.fed.omdbmemorizer.presentation.search
 
 import com.fed.omdbmemorizer.model.MovieDTO
+import io.reactivex.Observable
 
 
 interface SearchContracts {
@@ -13,11 +14,12 @@ interface SearchContracts {
     }
 
     interface Presenter {
-        fun onAttach(fragment: SearchContracts.Fragment)
-        fun onDetach()
-        fun searchTextEntered(title: String)
+        fun onResume(fragment: SearchContracts.Fragment)
+        fun onPause()
         fun clearButtonClicked()
         fun lastItemsShown()
         fun addTofavorites(movie: MovieDTO)
+        fun onSetTextChangeListener(charSequence: Observable<CharSequence>)
+//        fun lastItemShownRx(lastItemShown: Observable<Any>): Observable<Any>
     }
 }

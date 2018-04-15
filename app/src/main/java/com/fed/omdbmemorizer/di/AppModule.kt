@@ -13,6 +13,7 @@ import com.fed.omdbmemorizer.repository.IRepository
 import com.fed.omdbmemorizer.repository.Repository
 import dagger.Module
 import dagger.Provides
+import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -49,11 +50,15 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideSearchPresenter(repository: IRepository)
-            : SearchContracts.Presenter = SearchPresenter(repository)
+    fun provideCompositeDisposable() = CompositeDisposable()
 
     @Provides
     @Singleton
-    fun provideFavoritePresenter(repository: IRepository)
-            : FavoritesContracts.Presenter = FavoritesPresenter(repository)
+    fun provideSearchPresenter(repository: IRepository, disposable: CompositeDisposable)
+            : SearchContracts.Presenter = SearchPresenter(repository, disposable)
+
+    @Provides
+    @Singleton
+    fun provideFavoritePresenter(repository: IRepository, disposable: CompositeDisposable)
+            : FavoritesContracts.Presenter = FavoritesPresenter(repository, disposable)
 }

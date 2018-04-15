@@ -14,13 +14,12 @@ import com.fed.omdbmemorizer.model.MovieDTO
 import com.fed.omdbmemorizer.presentation.RecyclerAdapter
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.search_fragment_layout.clear_text_view
 import kotlinx.android.synthetic.main.search_fragment_layout.progress_bar
 import kotlinx.android.synthetic.main.search_fragment_layout.recycler_view
 import kotlinx.android.synthetic.main.search_fragment_layout.search_text_view
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -28,7 +27,6 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
     private lateinit var adapter: RecyclerAdapter
     @Inject
     lateinit var presenter: SearchContracts.Presenter
-    private val disposable: CompositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,14 +50,13 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
 
     override fun onResume() {
         super.onResume()
-        presenter.onAttach(this)
+        presenter.onResume(this)
         setListeners()
     }
 
     override fun onPause() {
         super.onPause()
-        disposable.dispose()
-        presenter.onDetach()
+        presenter.onPause()
     }
 
     override fun updateData(movies: ArrayList<MovieDTO>) {
@@ -89,21 +86,14 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
     }
 
     private fun setListeners() {
-        disposable.addAll(
-                RxTextView.textChanges(search_text_view)
-                        .debounce(500, TimeUnit.MILLISECONDS)
-                        .filter { it.length > 2 }
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
-                            presenter.searchTextEntered(it.toString())
-                        },
-                RxView.clicks(clear_text_view)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe {
-                            search_text_view.setText("")
-                            presenter.clearButtonClicked()
-                        }
-        )
+        presenter.onSetTextChangeListener(RxTextView.textChanges(search_text_view))
+
+        RxView.clicks(clear_text_view)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    search_text_view.setText("")
+                    presenter.clearButtonClicked()
+                }
 
         recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
@@ -112,7 +102,8 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
                         as LinearLayoutManager).findLastVisibleItemPosition() + 1
                 val totalItemCount = recyclerView.layoutManager.itemCount
                 if (lastVisibleItemPosition > totalItemCount - 4) {
-                    presenter.lastItemsShown()
+//                    presenter.lastItemsShown()
+//                    presenter.lastItemShownRx(??)
                 }
             }
         })
