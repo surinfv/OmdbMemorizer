@@ -21,7 +21,6 @@ class SearchPresenter(var repository: IRepository) : SearchContracts.Presenter {
 
     override fun searchTextEntered(title: String) {
         lastQuery = title
-        fragment?.showProgress()
         doRequest(true)
     }
 
@@ -30,6 +29,9 @@ class SearchPresenter(var repository: IRepository) : SearchContracts.Presenter {
             loadingInProgress = true
             if (newRequest) fragment?.clearMoviesList()
             repository.searchMovies(lastQuery, page.toString())
+                    .doOnSubscribe {
+                        if (newRequest) fragment?.showProgress()
+                    }
                     .doAfterTerminate {
                         fragment?.hideProgress()
                         loadingInProgress = false

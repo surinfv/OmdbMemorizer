@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 
 class SearchFragment : Fragment(), SearchContracts.Fragment {
-    private var adapter: RecyclerAdapter? = null
+    private lateinit var adapter: RecyclerAdapter
     @Inject
     lateinit var presenter: SearchContracts.Presenter
     private lateinit var disposable: CompositeDisposable
@@ -63,15 +63,21 @@ class SearchFragment : Fragment(), SearchContracts.Fragment {
     }
 
     override fun updateData(movies: ArrayList<MovieDTO>) {
-        adapter?.apply {
-            addMovies(movies)
-            notifyDataSetChanged()
+//        adapter?.apply {
+//            addMovies(movies)
+//            notifyDataSetChanged()
+//        }
+        adapter.addMovies(movies)
+        val now = adapter.itemCount
+        val before = now - movies.size
+        for (i in before + 1..now) {
+            adapter.notifyItemInserted(i)
         }
     }
 
     override fun clearMoviesList() {
-        adapter?.clearMovies()
-        adapter?.notifyDataSetChanged()
+        adapter.clearMovies()
+        adapter.notifyDataSetChanged()
     }
 
     override fun showToast(message: String) {
