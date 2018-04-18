@@ -1,7 +1,7 @@
 package com.fed.omdbmemorizer.di
 
-import com.fed.omdbmemorizer.presentation.favorites.FavoritesFragment
-import com.fed.omdbmemorizer.presentation.search.SearchFragment
+import com.fed.omdbmemorizer.presentation.view.fragment.favorites.FavoritesFragment
+import com.fed.omdbmemorizer.presentation.view.fragment.search.SearchFragment
 import dagger.Component
 import javax.inject.Singleton
 
