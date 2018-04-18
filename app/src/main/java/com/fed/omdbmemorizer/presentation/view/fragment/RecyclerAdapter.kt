@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.fed.omdbmemorizer.R
-import com.fed.omdbmemorizer.presentation.model.MovieModel
+import com.fed.omdbmemorizer.presentation.model.MovieView
 import kotlinx.android.synthetic.main.list_item.view.date_text_view
 import kotlinx.android.synthetic.main.list_item.view.favorite_text_view
 import kotlinx.android.synthetic.main.list_item.view.preview_image_view
@@ -16,9 +16,9 @@ import kotlinx.android.synthetic.main.list_item.view.title_text_view
 
 
 class RecyclerAdapter(private var context: Context?,
-                      private var movies: ArrayList<MovieModel>,
+                      private var movies: ArrayList<MovieView>,
                       private val isSearch: Boolean,
-                      private val favoriteClickListener: (MovieModel) -> Unit
+                      private val favoriteClickListener: (MovieView) -> Unit
                       )
 : RecyclerView.Adapter<RecyclerAdapter.RecyclerHolder>() {
     override fun onBindViewHolder(holder: RecyclerHolder, position: Int) {
@@ -30,12 +30,12 @@ class RecyclerAdapter(private var context: Context?,
         return RecyclerHolder(v)
     }
 
-    fun addMovies(movies: List<MovieModel>) {
+    fun addMovies(movies: List<MovieView>) {
         this.movies.addAll(movies)
     }
 
-    fun setMovies(movies: List<MovieModel>) {
-        this.movies = movies as ArrayList<MovieModel>
+    fun setMovies(movies: List<MovieView>) {
+        this.movies = movies as ArrayList<MovieView>
     }
 
     fun clearMovies() {
@@ -45,7 +45,7 @@ class RecyclerAdapter(private var context: Context?,
     override fun getItemCount(): Int = movies.size
 
     inner class RecyclerHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(item: MovieModel) {
+        fun bind(item: MovieView) {
             itemView.title_text_view.text = item.title
             if (item.poster.isNotEmpty() && item.poster != "N/A") {
             Glide.with(context!!)

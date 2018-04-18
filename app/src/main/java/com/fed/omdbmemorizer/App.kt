@@ -1,7 +1,6 @@
 package com.fed.omdbmemorizer
 
 import android.app.Application
-import com.facebook.stetho.Stetho
 import com.fed.omdbmemorizer.di.AppModule
 import com.fed.omdbmemorizer.di.DaggerAppComponent
 import com.fed.omdbmemorizer.di.DiProvider

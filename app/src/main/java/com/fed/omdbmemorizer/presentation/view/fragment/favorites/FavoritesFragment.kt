@@ -10,8 +10,8 @@ import android.widget.Toast
 import com.fed.omdbmemorizer.R
 import com.fed.omdbmemorizer.di.DiProvider
 import com.fed.omdbmemorizer.presentation.view.fragment.RecyclerAdapter
-import com.fed.omdbmemorizer.presentation.view.presenter.favorites.FavoritesPresenter
-import com.fed.omdbmemorizer.presentation.model.MovieModel
+import com.fed.omdbmemorizer.presentation.view.presenter.favorites.IFavoritesPresenter
+import com.fed.omdbmemorizer.presentation.model.MovieView
 import kotlinx.android.synthetic.main.favorites_fragment_layout.placeholder_favorite
 import kotlinx.android.synthetic.main.favorites_fragment_layout.recycler_view
 import javax.inject.Inject
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class FavoritesFragment : Fragment(), FavoritesView {
     private lateinit var adapter: RecyclerAdapter
     @Inject
-    lateinit var presenter: FavoritesPresenter
+    lateinit var presenter: IFavoritesPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,7 @@ class FavoritesFragment : Fragment(), FavoritesView {
         presenter.onResume(this)
     }
 
-    override fun updateData(movies: List<MovieModel>) {
+    override fun updateData(movies: List<MovieView>) {
         adapter.setMovies(movies)
         adapter.notifyDataSetChanged()
         if (movies.isEmpty()) {
@@ -63,7 +63,7 @@ class FavoritesFragment : Fragment(), FavoritesView {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
-    private fun removeFromFavorites(movie: MovieModel) {
+    private fun removeFromFavorites(movie: MovieView) {
         presenter.removeFavoritesClick(movie)
     }
 }

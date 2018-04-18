@@ -4,20 +4,25 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import com.fed.omdbmemorizer.data.database.AppDatabase
 import com.fed.omdbmemorizer.data.database.MovieDAO
+import com.fed.omdbmemorizer.data.entity.mapper.IMovieEntityMapper
+import com.fed.omdbmemorizer.data.entity.mapper.MovieEntityMapper
 import com.fed.omdbmemorizer.data.network.OmdbApi
-import com.fed.omdbmemorizer.data.repository.LocalMovieStore
+import com.fed.omdbmemorizer.data.repository.IMovieRepository
 import com.fed.omdbmemorizer.data.repository.MovieRepository
-import com.fed.omdbmemorizer.data.repository.MovieRepositoryInterface
-import com.fed.omdbmemorizer.data.repository.NetworkMovieStore
-import com.fed.omdbmemorizer.domain.interactor.favoriteMovies.FavoriteMoviesImpl
+import com.fed.omdbmemorizer.data.repository.local.ILocalMovieStore
+import com.fed.omdbmemorizer.data.repository.local.LocalMovieStore
+import com.fed.omdbmemorizer.data.repository.net.INetworkMovieStore
+import com.fed.omdbmemorizer.data.repository.net.NetworkMovieStore
 import com.fed.omdbmemorizer.domain.interactor.favoriteMovies.FavoriteMoviesInteractor
-import com.fed.omdbmemorizer.domain.interactor.searchMovies.SearchMoviesImpl
+import com.fed.omdbmemorizer.domain.interactor.favoriteMovies.IFavoriteMoviesInteractor
+import com.fed.omdbmemorizer.domain.interactor.searchMovies.ISearchMoviesInteractor
 import com.fed.omdbmemorizer.domain.interactor.searchMovies.SearchMoviesInteractor
+import com.fed.omdbmemorizer.presentation.model.mapper.IMovieViewMapper
+import com.fed.omdbmemorizer.presentation.model.mapper.MovieViewMapper
 import com.fed.omdbmemorizer.presentation.view.presenter.favorites.FavoritesPresenter
-import com.fed.omdbmemorizer.presentation.view.presenter.favorites.FavoritesPresenterImpl
-import com.fed.omdbmemorizer.presentation.model.MovieModelMapper
+import com.fed.omdbmemorizer.presentation.view.presenter.favorites.IFavoritesPresenter
+import com.fed.omdbmemorizer.presentation.view.presenter.search.ISearchPresenter
 import com.fed.omdbmemorizer.presentation.view.presenter.search.SearchPresenter
-import com.fed.omdbmemorizer.presentation.view.presenter.search.SearchPresenterImpl
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -52,28 +57,32 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideLocalMovieStore(movieDao: MovieDAO): LocalMovieStore =
+    fun provideMovieEntityMapper(): IMovieEntityMapper = MovieEntityMapper()
+
+    @Provides
+    @Singleton
+    fun provideLocalMovieStore(movieDao: MovieDAO): ILocalMovieStore =
             LocalMovieStore(movieDao)
 
     @Provides
     @Singleton
-    fun provideNetworkMovieStore(api: OmdbApi): NetworkMovieStore =
-            NetworkMovieStore(api)
+    fun provideNetworkMovieStore(api: OmdbApi, mapper: IMovieEntityMapper): INetworkMovieStore =
+            NetworkMovieStore(api, mapper)
 
     @Provides
     @Singleton
-    fun provideRepository(localMovieStore: LocalMovieStore,
-                          networkMovieStore: NetworkMovieStore): MovieRepositoryInterface = MovieRepository(localMovieStore, networkMovieStore)
+    fun provideRepository(localMovieStore: ILocalMovieStore,
+                          networkMovieStore: INetworkMovieStore): IMovieRepository = MovieRepository(localMovieStore, networkMovieStore)
 
     @Provides
     @Singleton
-    fun provideSearchInteractor(repository: MovieRepositoryInterface) : SearchMoviesInteractor =
-            SearchMoviesImpl(repository)
+    fun provideSearchInteractor(repository: IMovieRepository): ISearchMoviesInteractor =
+            SearchMoviesInteractor(repository)
 
     @Provides
     @Singleton
-    fun provideFavoritesInteractor(repository: MovieRepositoryInterface) : FavoriteMoviesInteractor =
-            FavoriteMoviesImpl(repository)
+    fun provideFavoritesInteractor(repository: IMovieRepository): IFavoriteMoviesInteractor =
+            FavoriteMoviesInteractor(repository)
 
 
     @Provides
@@ -82,23 +91,23 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideMovieModelMapper(): MovieModelMapper = MovieModelMapper()
+    fun provideMovieViewMapper(): IMovieViewMapper = MovieViewMapper()
 
     @Provides
     @Singleton
-    fun provideSearchPresenter(searchInteractor: SearchMoviesInteractor,
-                               favoriteInteractor: FavoriteMoviesInteractor,
+    fun provideSearchPresenter(searchInteractor: ISearchMoviesInteractor,
+                               favoriteInteractor: IFavoriteMoviesInteractor,
                                disposable: CompositeDisposable,
-                               mapper: MovieModelMapper) : SearchPresenter =
-            SearchPresenterImpl(searchInteractor,
+                               mapper: IMovieViewMapper): ISearchPresenter =
+            SearchPresenter(searchInteractor,
                     favoriteInteractor,
                     disposable,
                     mapper)
 
     @Provides
     @Singleton
-    fun provideFavoritePresenter(interactor: FavoriteMoviesInteractor,
+    fun provideFavoritePresenter(interactor: IFavoriteMoviesInteractor,
                                  disposable: CompositeDisposable,
-                                 mapper: MovieModelMapper)
-            : FavoritesPresenter = FavoritesPresenterImpl(interactor, disposable, mapper)
+                                 mapper: IMovieViewMapper)
+            : IFavoritesPresenter = FavoritesPresenter(interactor, disposable, mapper)
 }

@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.fed.omdbmemorizer.R
 import com.fed.omdbmemorizer.di.DiProvider
-import com.fed.omdbmemorizer.presentation.model.MovieModel
+import com.fed.omdbmemorizer.presentation.model.MovieView
 import com.fed.omdbmemorizer.presentation.view.fragment.RecyclerAdapter
-import com.fed.omdbmemorizer.presentation.view.presenter.search.SearchPresenter
+import com.fed.omdbmemorizer.presentation.view.presenter.search.ISearchPresenter
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class SearchFragment : Fragment(), SearchView {
     private lateinit var adapter: RecyclerAdapter
     @Inject
-    lateinit var presenter: SearchPresenter
+    lateinit var presenter: ISearchPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +59,7 @@ class SearchFragment : Fragment(), SearchView {
         presenter.onPause()
     }
 
-    override fun updateData(movies: List<MovieModel>) {
+    override fun updateData(movies: List<MovieView>) {
         val before = adapter.itemCount
         adapter.addMovies(movies)
         val now = adapter.itemCount
@@ -108,7 +108,7 @@ class SearchFragment : Fragment(), SearchView {
         })
     }
 
-    private fun addToFavoritesClick(movie: MovieModel) {
+    private fun addToFavoritesClick(movie: MovieView) {
         presenter.addToFavorites(movie)
     }
 }
