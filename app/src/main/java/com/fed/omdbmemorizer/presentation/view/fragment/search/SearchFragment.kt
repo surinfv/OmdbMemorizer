@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.fed.omdbmemorizer.R
-import com.fed.omdbmemorizer.di.DiProvider
 import com.fed.omdbmemorizer.presentation.model.MovieView
 import com.fed.omdbmemorizer.presentation.view.fragment.RecyclerAdapter
 import com.fed.omdbmemorizer.presentation.view.presenter.search.ISearchPresenter
@@ -20,18 +19,15 @@ import kotlinx.android.synthetic.main.search_fragment_layout.clear_text_view
 import kotlinx.android.synthetic.main.search_fragment_layout.progress_bar
 import kotlinx.android.synthetic.main.search_fragment_layout.recycler_view
 import kotlinx.android.synthetic.main.search_fragment_layout.search_text_view
-import javax.inject.Inject
-
+import org.koin.android.ext.android.inject
 
 class SearchFragment : Fragment(), SearchView {
     private lateinit var adapter: RecyclerAdapter
-    @Inject
-    lateinit var presenter: ISearchPresenter
+    private val presenter: ISearchPresenter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
-        DiProvider.component?.injects(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater,

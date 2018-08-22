@@ -8,24 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.fed.omdbmemorizer.R
-import com.fed.omdbmemorizer.di.DiProvider
+import com.fed.omdbmemorizer.presentation.model.MovieView
 import com.fed.omdbmemorizer.presentation.view.fragment.RecyclerAdapter
 import com.fed.omdbmemorizer.presentation.view.presenter.favorites.IFavoritesPresenter
-import com.fed.omdbmemorizer.presentation.model.MovieView
 import kotlinx.android.synthetic.main.favorites_fragment_layout.placeholder_favorite
 import kotlinx.android.synthetic.main.favorites_fragment_layout.recycler_view
-import javax.inject.Inject
-
+import org.koin.android.ext.android.inject
 
 class FavoritesFragment : Fragment(), FavoritesView {
     private lateinit var adapter: RecyclerAdapter
-    @Inject
-    lateinit var presenter: IFavoritesPresenter
+    private val presenter: IFavoritesPresenter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
-        DiProvider.component?.injects(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
