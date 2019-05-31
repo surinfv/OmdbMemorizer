@@ -27,7 +27,7 @@ android {
 ext {
     androidSupport = '27.1.1'
     retrofit = '2.4.0'
-    glide = '4.7.1'
+    glide = '4.8.0'
     dagger2 = '2.12'
     roomPersistence = '1.1.1'
 }
@@ -38,7 +38,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$androidSupport"
     implementation "com.android.support:design:$androidSupport"
     implementation "com.android.support:cardview-v7:$androidSupport"
-    implementation "com.android.support.constraint:constraint-layout:1.1.2"
+    implementation "com.android.support.constraint:constraint-layout:1.1.3"
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
@@ -50,9 +50,9 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glide"
 
     //Rx
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
-    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.3'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.2.0'
 
     //DI
     implementation 'org.koin:koin-android:1.0.0-beta-7'
