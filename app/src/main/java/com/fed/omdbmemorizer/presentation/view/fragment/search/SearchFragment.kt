@@ -22,8 +22,8 @@ import kotlinx.android.synthetic.main.search_fragment_layout.search_text_view
 import org.koin.android.ext.android.inject
 
 class SearchFragment : Fragment(), SearchView {
-    private lateinit var adapter: RecyclerAdapter
     private val presenter: ISearchPresenter by inject()
+    private lateinit var adapter: RecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

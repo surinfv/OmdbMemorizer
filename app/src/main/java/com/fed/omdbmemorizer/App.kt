@@ -23,43 +23,54 @@ import com.fed.omdbmemorizer.presentation.view.presenter.favorites.IFavoritesPre
 import com.fed.omdbmemorizer.presentation.view.presenter.search.ISearchPresenter
 import com.fed.omdbmemorizer.presentation.view.presenter.search.SearchPresenter
 import io.reactivex.disposables.CompositeDisposable
-import org.koin.android.ext.android.startKoin
-import org.koin.dsl.module.module
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
+import org.koin.experimental.builder.single
+import org.koin.experimental.builder.singleBy
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class App : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
-        startKoin(this, listOf(koinModule))
-    }
-
     private val TABLE_NAME = "favoritesMovies-db"
     private val BASE_URL = "http://www.omdbapi.com"
 
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            androidLogger()
+            androidContext(this@App)
+            modules(koinModule)
+        }
+    }
+
     val koinModule = module {
-        single<IFavoritesPresenter> { create<FavoritesPresenter>() }
-        single<IFavoriteMoviesInteractor> { create<FavoriteMoviesInteractor>() }
-        single<IMovieRepository> { create<MovieRepository>() }
-        single<ILocalMovieStore> { create<LocalMovieStore>() }
-        single { Room.databaseBuilder(applicationContext, AppDatabase::class.java, TABLE_NAME)
+        singleBy<IFavoritesPresenter, FavoritesPresenter>()
+        singleBy<IFavoritesPresenter, FavoritesPresenter>()
+        singleBy<IFavoriteMoviesInteractor, FavoriteMoviesInteractor>()
+        singleBy<IMovieRepository, MovieRepository>()
+        singleBy<ILocalMovieStore, LocalMovieStore>()
+        single {
+            Room.databaseBuilder(applicationContext, AppDatabase::class.java, TABLE_NAME)
                     .build()
                     .movieDAO
         }
-        single<INetworkMovieStore> { create<NetworkMovieStore>() }
-        single { Retrofit.Builder()
+        singleBy<INetworkMovieStore, NetworkMovieStore>()
+        single {
+            Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
                     .create(OmdbApi::class.java)
         }
-        single<IMovieEntityMapper> { create<MovieEntityMapper>() }
+        singleBy<IMovieEntityMapper, MovieEntityMapper>()
         single { CompositeDisposable() }
-        single<IMovieViewMapper> { create<MovieViewMapper>() }
-        single<ISearchPresenter> { create<SearchPresenter>() }
-        single<ISearchMoviesInteractor> { create<SearchMoviesInteractor>() }
+        singleBy<IMovieViewMapper, MovieViewMapper>()
+        singleBy<ISearchPresenter, SearchPresenter>()
+        singleBy<ISearchMoviesInteractor, SearchMoviesInteractor>()
     }
 }
